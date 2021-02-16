@@ -1,0 +1,9 @@
+<h1>Vaccine API</h1>
+<p>This service gathers vaccine clinic data from <%= @sources.count %> publicly available state and county databases. Data is refreshed every 10 minutes.</p>
+<a href=<%= clinic_index_path %>>View all clinics</a>
+
+<ul class="mt-3">
+    <% @sources.each do |source| %>
+        <li><a href="<%= source.url %>"><%= source.state %></a></li>
+    <% end %>
+</ul>

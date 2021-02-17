@@ -1,5 +1,5 @@
-namespace :get_locations do
-    task get_location: :environment do
+namespace :clinics do
+    task scrape: :environment do
         @driver = Selenium::WebDriver.for :chrome
         Instance.where(status: 'active').each do |instance|
             @driver.get "#{instance.url}/clinic/search"
@@ -14,9 +14,9 @@ namespace :get_locations do
                     clinics.each do |clinic|
                         
                         paragraphs = clinic.find_elements(:tag_name, 'p')
-                        
-                        record = Clinic.new
+                        title_hash = "CL#{Digest::MD5.hexdigest(paragraphs[0].text)}"
 
+                        record = Clinic.find_or_initialize_by(title_hash: title_hash)
                         header = paragraphs[0].text.split(" on ")
 
                         record[:title] = header[0]
@@ -33,7 +33,7 @@ namespace :get_locations do
                             begin
                                 record[key] = split[1]
                             rescue ActiveModel::MissingAttributeError
-                                puts "Invalid attribute"
+                                puts "Invalid attribute #{key}"
                             end
                         end
 

@@ -1,6 +1,6 @@
-namespace :data do
+namespace :instances do
     desc "I am short, but comprehensive description for my cool task"
-    task fetch_states: :environment do
+    task fetch: :environment do
 
         Instance.all.each do |row|
             uri = URI("https://cw2-#{row.state}-production.herokuapp.com/")
